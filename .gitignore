@@ -5,7 +5,9 @@ __pycache__/
 dist/
 build/
 .pytest_cache/
-results/
+results/*.png
+results/*.csv
+results/*.json
 *.tar.gz
 .venv/
 venv/
