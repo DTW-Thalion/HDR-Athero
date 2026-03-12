@@ -19,6 +19,9 @@ python -m hdr_athero.simulation.run
 
 # Run just the spectral analysis
 python -c "from hdr_athero.analysis.spectral import print_spectral_report; print_spectral_report()"
+
+# Run the latent space recovery experiment
+python -c "from hdr_athero.analysis.latent_recovery import run_experiment; run_experiment()"
 ```
 
 ## Structure
@@ -29,6 +32,8 @@ python -c "from hdr_athero.analysis.spectral import print_spectral_report; print
 - `hdr_athero/simulation/controller.py` — Open-loop, guideline, LQR controllers
 - `hdr_athero/simulation/run.py` — Main simulation entry point
 - `hdr_athero/analysis/spectral.py` — Spectral radii, controllability Gramian
+- `hdr_athero/analysis/observation_model.py` — Observation matrix C, noise R, missingness generator
+- `hdr_athero/analysis/latent_recovery.py` — PCA / AE / VAE latent space recovery experiment
 
 ## Key Design Decisions
 
