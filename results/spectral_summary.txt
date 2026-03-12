@@ -1,0 +1,130 @@
+===============================================================================
+  HDR-Athero Spectral Summary
+  Generated: 2026-03-12
+===============================================================================
+
+SPECTRAL RADII OF DYNAMICS MATRICES A_k
+========================================
+
+  Basin 0 (subclinical):    rho = 0.9101
+  Basin 1 (vulnerable):     rho = 0.9909
+  Basin 2 (post_ACS):       rho = 0.8780
+
+  All basins: rho < 1  =>  STABLE
+
+  Ordering: rho(post_ACS) < rho(subclinical) < rho(vulnerable)
+  This confirms the biological expectation:
+    - Post-ACS is the most stable (aggressive therapy)
+    - Subclinical is moderately stable (compensated)
+    - Vulnerable is near-unit-root (maladaptive, self-reinforcing)
+
+
+EIGENVALUE SPECTRA
+==================
+
+  Basin 0 (subclinical):
+    lambda_1 = 0.9101    (dominant: slow VI/LD mode)
+    lambda_2 = 0.7938    (intermediate: ED mode)
+    lambda_3 = 0.4986    (fast: HS mode)
+    lambda_4 = 0.0025    (very fast: decoupled component)
+
+  Basin 1 (vulnerable):
+    lambda_1 = 0.9909    (dominant: near-unit-root mode)
+    lambda_2 = 0.9362    (slow: secondary inflammatory mode)
+    lambda_3 = 0.9104    (slow: lipid-endothelial coupled mode)
+    lambda_4 = 0.7958    (moderate: haemodynamic mode)
+
+    NOTE: All 4 eigenvalues are > 0.79 in Basin 1.
+    This reflects the entrained, self-reinforcing nature
+    of the vulnerable plaque regime -- all axes decay
+    slowly because the coupling matrix J^(1) dominates
+    over the decay matrix D^(1).
+
+  Basin 2 (post_ACS):
+    lambda_1 = 0.8780    (dominant: post-event recovery mode)
+    lambda_2 = 0.7911    (moderate: lipid mode)
+    lambda_3 = 0.7911    (moderate: ED/HS coupled mode)
+    lambda_4 = 0.4970    (fast: decoupled component)
+
+    NOTE: Repeated eigenvalue at 0.7911 suggests near-symmetric
+    coupling between certain axes in the post-ACS regime.
+
+
+RECOVERY AMPLIFICATION  1/(1 - rho^2)
+======================================
+
+  This quantity scales the recovery surrogate tau_tilde.
+  It measures how much a given state deviation is "amplified"
+  by the basin dynamics -- the closer rho is to 1, the harder
+  it is to recover.
+
+  Basin 0 (subclinical):    1/(1-rho^2) =   5.82x
+  Basin 1 (vulnerable):     1/(1-rho^2) =  55.44x
+  Basin 2 (post_ACS):       1/(1-rho^2) =   4.36x
+
+  Ratio Basin 1 / Basin 0:  9.5x
+  Ratio Basin 1 / Basin 2: 12.7x
+
+  The vulnerable basin amplifies recovery burden by an order
+  of magnitude compared to either the subclinical or post-ACS
+  basins.  This is the mathematical signature of the "stuck in
+  a bad basin" problem central to HDR theory.
+
+
+CONTROLLABILITY GRAMIAN ANALYSIS (T=50 steps)
+=============================================
+
+  Basin 0 (subclinical):
+    Gramian rank:          4/4 (FULLY CONTROLLABLE)
+    Condition number:      21.6
+    Gramian eigenvalues:   [0.8650, 0.2394, 0.1266, 0.0400]
+    Per-axis reachability:
+      VI:  0.2844    LD:  0.7221    ED:  0.1596    HS:  0.1049
+    Interpretation: LD is the most reachable axis (statin
+    provides the strongest single-axis control effect).
+
+  Basin 1 (vulnerable):
+    Gramian rank:          4/4 (FULLY CONTROLLABLE)
+    Condition number:      69.0
+    Gramian eigenvalues:   [3.8013, 0.5054, 0.2341, 0.0551]
+    Per-axis reachability:
+      VI:  1.7900    LD:  1.4988    ED:  1.0481    HS:  0.2590
+    Interpretation: Higher reachability values reflect the
+    higher gains needed due to near-unit-root dynamics.
+    Condition number 69.0 means some control directions
+    are ~69x harder to reach than others.
+
+  Basin 2 (post_ACS):
+    Gramian rank:          4/4 (FULLY CONTROLLABLE)
+    Condition number:      24.6
+    Gramian eigenvalues:   [0.6753, 0.2382, 0.1592, 0.0275]
+    Per-axis reachability:
+      VI:  0.2967    LD:  0.4676    ED:  0.1589    HS:  0.1770
+    Interpretation: Most uniform reachability of the three
+    basins, reflecting balanced post-ACS pharmacotherapy.
+
+
+ICI DIAGNOSTIC: EFFECTIVE SAMPLE COUNT
+=======================================
+
+  Autocorrelation time tau_ac = 1/(1-rho):
+
+    subclinical:   tau_ac =  11.1 days
+    vulnerable:    tau_ac = 110.4 days
+    post_ACS:      tau_ac =   8.2 days
+
+  For a 180-day observation window:
+    T_eff = T_dwell / tau_ac
+
+    subclinical:   T_eff = 16.2 effective observations
+    vulnerable:    T_eff =  1.6 effective observations
+    post_ACS:      T_eff = 22.0 effective observations
+
+  Minimum T_eff for n=4 state identification: ~40-80
+  (rule of thumb: 10-20 x state dimension)
+
+  CONCLUSION: Basin identification in the vulnerable regime
+  requires >6000 days (~16 years) of continuous observation,
+  which is clinically impractical.  This is the Identification-
+  Control Inversion (ICI): the basin most in need of precise
+  control is the one where system identification fails.

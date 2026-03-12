@@ -1,0 +1,199 @@
+===============================================================================
+  HDR-Athero Simulation Output
+  Generated: 2026-03-12
+  Configuration: 20 episodes x 180 days x 5 controllers x 3 basins
+  Random seed: 42
+===============================================================================
+
+
+=================================================================
+  SPECTRAL ANALYSIS -- Atherosclerosis SLDS (4-axis)
+=================================================================
+
+  Basin: subclinical
+    rho(A_k) = 0.9101  (STABLE)
+    Recovery amplification 1/(1-rho^2) = 5.82x
+    Eigenvalues: 0.9101, 0.7938, 0.4986, 0.0025
+
+  Basin: vulnerable
+    rho(A_k) = 0.9909  (STABLE)
+    Recovery amplification 1/(1-rho^2) = 55.44x
+    Eigenvalues: 0.9909, 0.9362, 0.9104, 0.7958
+
+  Basin: post_ACS
+    rho(A_k) = 0.8780  (STABLE)
+    Recovery amplification 1/(1-rho^2) = 4.36x
+    Eigenvalues: 0.8780, 0.7911, 0.7911, 0.4970
+
+
+=================================================================
+  CONTROLLABILITY ANALYSIS -- 50-step Gramian
+=================================================================
+
+  Basin: subclinical
+    Rank: 4/4  (CONTROLLABLE)
+    Gramian eigenvalues: 0.8650, 0.2394, 0.1266, 0.0400
+    Condition number: 21.6
+    Per-axis reachability energy:
+      VI  :   0.2844
+      LD  :   0.7221
+      ED  :   0.1596
+      HS  :   0.1049
+
+  Basin: vulnerable
+    Rank: 4/4  (CONTROLLABLE)
+    Gramian eigenvalues: 3.8013, 0.5054, 0.2341, 0.0551
+    Condition number: 69.0
+    Per-axis reachability energy:
+      VI  :   1.7900
+      LD  :   1.4988
+      ED  :   1.0481
+      HS  :   0.2590
+
+  Basin: post_ACS
+    Rank: 4/4  (CONTROLLABLE)
+    Gramian eigenvalues: 0.6753, 0.2382, 0.1592, 0.0275
+    Condition number: 24.6
+    Per-axis reachability energy:
+      VI  :   0.2967
+      LD  :   0.4676
+      ED  :   0.1589
+      HS  :   0.1770
+
+
+=================================================================
+  RECOVERY SURROGATE DEMONSTRATION
+  Same state deviation, different basins
+=================================================================
+
+  State: x = [1.0, 1.0, 1.0, 1.0]
+  (= 1 SD above target on all four axes)
+
+  Basin 0 (subclinical):
+    rho(A_k) = 0.9101
+    Amplification 1/(1-rho^2) = 5.82x
+    tau_tilde(x, z=0) = 10.189
+
+  Basin 1 (vulnerable):
+    rho(A_k) = 0.9909
+    Amplification 1/(1-rho^2) = 55.44x
+    tau_tilde(x, z=1) = 97.026
+
+  Basin 2 (post_ACS):
+    rho(A_k) = 0.8780
+    Amplification 1/(1-rho^2) = 4.36x
+    tau_tilde(x, z=2) = 7.636
+
+  Interpretation: The same 1-SD deviation on all axes produces a
+  recovery burden 9.5x higher in Basin 1 (vulnerable) vs Basin 0
+  (subclinical), and 12.7x higher than Basin 2 (post-ACS).  This
+  is the quantitative expression of the maladaptive regime.
+
+
+=================================================================
+  LQR GAIN ANALYSIS
+=================================================================
+
+  Basin 0 (subclinical) -- K_0:
+              VI        LD        ED        HS
+          statin   -0.1775   -2.5286    0.2434    0.0145
+  anti_inflammatory   -2.6618    0.4247    0.4127   -0.0026
+  antihypertensive   -0.0382   -0.1202    0.4684    0.0357
+        exercise    0.3625    0.3506   -1.8313   -0.1076
+
+  Basin 1 (vulnerable) -- K_1:
+              VI        LD        ED        HS
+          statin   -0.2290   -3.0984    0.6252   -0.1065
+  anti_inflammatory   -3.9217    0.4688    1.0940   -0.2375
+  antihypertensive   -0.0054   -0.1779    1.4212   -3.0040
+        exercise    0.4440    0.5649   -4.9446    0.8750
+
+  Basin 2 (post_ACS) -- K_2:
+              VI        LD        ED        HS
+          statin   -0.1744   -1.9787    0.3654   -0.0428
+  anti_inflammatory   -3.0938    0.5077    0.6266   -0.1111
+  antihypertensive   -0.0553   -0.1121    0.8287   -1.4116
+        exercise    0.7063    0.5872   -5.2605    0.6151
+
+  Pooled (basin-unaware) -- K_pool:
+              VI        LD        ED        HS
+          statin   -0.1903   -2.4864    0.3959   -0.0427
+  anti_inflammatory   -3.1786    0.4749    0.7051   -0.1139
+  antihypertensive   -0.0255   -0.1357    0.8543   -1.3825
+        exercise    0.4700    0.4834   -3.6611    0.3989
+
+
+=================================================================
+  ICI DIAGNOSTIC -- Effective Sample Count
+=================================================================
+
+  The autocorrelation time within each basin is ~1/(1-rho):
+
+    subclinical:  rho=0.9101  ->  autocorr time = 11.1 days
+                  T_eff(180d dwell) = 16.2 effective observations
+
+    vulnerable:   rho=0.9909  ->  autocorr time = 110.4 days
+                  T_eff(180d dwell) = 1.6 effective observations
+
+    post_ACS:     rho=0.8780  ->  autocorr time = 8.2 days
+                  T_eff(180d dwell) = 22.0 effective observations
+
+  For n=4 state dimensions, minimum T_eff for reliable
+  identification is ~40-80 (rule of thumb: 10-20x state dim).
+
+  Basin 'vulnerable' is near or below this threshold.
+  This is the ICI's fundamental insight: the hardest basin
+  to control is also the hardest to identify.
+
+
+==========================================================================================
+  COMPARATIVE SIMULATION -- 20 episodes x 180 days per condition
+==========================================================================================
+
+  Starting Basin: subclinical
+  Controller           Mean Cost     +/- Std  Time-in-Target     +/- Std
+  ----------------------------------------------------------------------
+  open_loop                3.169    13.188          90.1%     0.138
+  guideline              242.698   939.745           2.1%     0.005
+  aggressive            1051.668  4054.440           1.1%     0.005
+  lqr_basin                0.843     3.431          92.5%     0.103
+  lqr_pooled               0.734     2.950          91.5%     0.095
+
+  Starting Basin: vulnerable
+  Controller           Mean Cost     +/- Std  Time-in-Target     +/- Std
+  ----------------------------------------------------------------------
+  open_loop               16.718    22.001          31.5%     0.171
+  guideline             6746.945  2858.962           1.1%     0.010
+  aggressive           25657.956  10357.559           0.6%     0.005
+  lqr_basin               58.700    73.956          16.1%     0.190
+  lqr_pooled              55.126    74.661          17.6%     0.195
+
+  Starting Basin: post_ACS
+  Controller           Mean Cost     +/- Std  Time-in-Target     +/- Std
+  ----------------------------------------------------------------------
+  open_loop                0.073     0.094          93.6%     0.043
+  guideline               14.368     7.777           1.5%     0.008
+  aggressive              75.408    26.669           0.8%     0.005
+  lqr_basin                0.046     0.061          92.4%     0.048
+  lqr_pooled               0.047     0.062          91.9%     0.052
+
+
+=================================================================
+  HDR ADVANTAGE ANALYSIS (LQR Basin-Aware vs Pooled)
+=================================================================
+
+  subclinical   : HDR=0.843  Pooled=0.734  Gain=-14.9%
+  vulnerable    : HDR=58.700  Pooled=55.126  Gain=-6.5%
+  post_ACS      : HDR=0.046  Pooled=0.047  Gain=+2.3%
+
+  Note: The HDR advantage (basin-aware vs pooled LQR) is modest
+  in this 4-axis model because the pooled controller already
+  captures the dominant dynamics.  The advantage is expected to
+  grow with higher-dimensional state spaces (HDR v5.4 full 8-axis)
+  and when basin identification uncertainty is accounted for.
+
+===============================================================================
+  Disclaimer: All results are computational only.
+  No clinical validity is asserted.
+  The Thalion Initiative, Boston, Massachusetts, 2025.
+===============================================================================

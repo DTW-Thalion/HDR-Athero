@@ -1,0 +1,94 @@
+===============================================================================
+  HDR-Athero Test Report
+  Generated: 2026-03-12
+  Python 3.11.14 | pytest 9.0.2 | numpy 2.4.3 | scipy 1.17.1
+===============================================================================
+
+SUMMARY: 24 tests collected, 24 passed, 0 failed, 0 errors
+
+===============================================================================
+  TEST RESULTS (verbose)
+===============================================================================
+
+tests/test_athero.py::TestParameterShapes::test_tau_shape ............. PASSED
+tests/test_athero.py::TestParameterShapes::test_A_shapes .............. PASSED
+tests/test_athero.py::TestParameterShapes::test_B_shapes .............. PASSED
+tests/test_athero.py::TestParameterShapes::test_J_shapes .............. PASSED
+tests/test_athero.py::TestParameterShapes::test_Q_shapes .............. PASSED
+tests/test_athero.py::TestParameterShapes::test_cost_matrices ......... PASSED
+
+tests/test_athero.py::TestParameterProperties::test_tau_positive ...... PASSED
+tests/test_athero.py::TestParameterProperties::test_J_zero_diagonal ... PASSED
+tests/test_athero.py::TestParameterProperties::test_J_nonnegative_offdiag PASSED
+tests/test_athero.py::TestParameterProperties::test_B_therapeutic_sign  PASSED
+tests/test_athero.py::TestParameterProperties::test_Q_spd ............ PASSED
+tests/test_athero.py::TestParameterProperties::test_P_trans_rows_valid  PASSED
+tests/test_athero.py::TestParameterProperties::test_basin1_tau_larger . PASSED
+
+tests/test_athero.py::TestStability::test_all_basins_stable ........... PASSED
+tests/test_athero.py::TestStability::test_spectral_ordering ........... PASSED
+tests/test_athero.py::TestStability::test_vulnerable_near_unit_root ... PASSED
+
+tests/test_athero.py::TestControllability::test_all_basins_controllable PASSED
+tests/test_athero.py::TestControllability::test_gramian_positive_definite PASSED
+
+tests/test_athero.py::TestSimulation::test_open_loop_runs ............. PASSED
+tests/test_athero.py::TestSimulation::test_lqr_basin_runs ............. PASSED
+tests/test_athero.py::TestSimulation::test_lqr_reduces_cost_vs_open_loop PASSED
+tests/test_athero.py::TestSimulation::test_basin_transitions_occur .... PASSED
+tests/test_athero.py::TestSimulation::test_controls_within_bounds ..... PASSED
+tests/test_athero.py::TestSimulation::test_recovery_surrogate_amplification PASSED
+
+===============================================================================
+  TEST SUITE BREAKDOWN
+===============================================================================
+
+1. TestParameterShapes (6 tests)
+   Validates dimensional correctness of all parameter matrices:
+   - TAU: (K=3, n=4) decay time constants
+   - A:   K matrices of shape (n=4, n=4) dynamics
+   - B:   K matrices of shape (n=4, m=4) intervention maps
+   - J:   K matrices of shape (n=4, n=4) coupling
+   - Q:   K matrices of shape (n=4, n=4) noise covariance
+   - Q_COST: (n=4, n=4), R_COST: (m=4, m=4) cost weights
+
+2. TestParameterProperties (7 tests)
+   Validates biological constraints on every parameter:
+   - TAU > 0: All decay constants are positive (physical requirement)
+   - J diagonal = 0: No self-coupling on the diagonal
+   - J off-diagonal >= 0: Disease coupling is self-reinforcing
+   - B <= 0: All intervention effects are therapeutic (drive state toward zero)
+   - Q is SPD: Noise covariance is symmetric positive definite
+   - P_TRANS valid: Transition probability rows sum to <= 1
+   - Basin 1 TAU >= Basin 0 TAU: Vulnerable basin recovers more slowly
+
+3. TestStability (3 tests)
+   Validates spectral properties of the dynamics matrices:
+   - All basins stable: rho(A_k) < 1 for k = 0, 1, 2
+   - Spectral ordering: rho(post_ACS) < rho(subclinical) < rho(vulnerable)
+   - Near-unit-root: Basin 1 rho in [0.88, 0.998] (the ICI regime)
+
+4. TestControllability (2 tests)
+   Validates that the system is controllable in every basin:
+   - Controllability rank = 4 (full state dimension) for all basins
+   - Gramian minimum eigenvalue > 0 (positive definite)
+
+5. TestSimulation (6 tests)
+   End-to-end integration tests:
+   - Open-loop simulation produces finite states and costs (T=30)
+   - LQR basin-aware simulation produces finite states (T=30)
+   - LQR reduces mean cost vs open-loop in Basin 0 (10-episode average)
+   - Basin transitions occur over long horizons (T=5000)
+   - All 5 controllers produce controls within [0, u_max] bounds
+   - Recovery surrogate: Basin 1 tau_tilde > 3x Basin 0 tau_tilde
+
+===============================================================================
+  VERIFICATION STATUS
+===============================================================================
+
+  Parameter matrices .............. VERIFIED (6/6 shape, 7/7 property)
+  Spectral stability .............. VERIFIED (all 3 basins stable)
+  Controllability ................. VERIFIED (all 3 basins full-rank)
+  Simulation integrity ............ VERIFIED (6/6 integration tests)
+
+  OVERALL: 24/24 PASSED
